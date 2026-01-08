@@ -24,3 +24,30 @@ function graffiti_init() {
 	new Graffiti_REST_API();
 }
 add_action( 'plugins_loaded', 'graffiti_init' );
+
+function graffiti_enqueue_assets() {
+	if ( ! is_singular( array( 'post', 'page' ) ) ) {
+		return;
+	}
+
+	wp_enqueue_style(
+		'graffiti-style',
+		GRAFFITI_PLUGIN_URL . 'assets/css/graffiti.css',
+		array(),
+		GRAFFITI_VERSION
+	);
+
+	wp_enqueue_script(
+		'graffiti-script',
+		GRAFFITI_PLUGIN_URL . 'assets/js/graffiti.js',
+		array(),
+		GRAFFITI_VERSION,
+		true
+	);
+
+	wp_localize_script( 'graffiti-script', 'graffitiData', array(
+		'restUrl' => esc_url_raw( rest_url() ),
+		'postId'  => get_the_ID(),
+	) );
+}
+add_action( 'wp_enqueue_scripts', 'graffiti_enqueue_assets' );
