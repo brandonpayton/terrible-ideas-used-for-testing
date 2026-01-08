@@ -210,7 +210,11 @@
 
         const item = document.createElement('div');
         item.className = 'graffiti-item';
-        item.innerHTML = `<img src="${imageUrl}" alt="Visitor graffiti" loading="lazy" />`;
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.alt = 'Visitor graffiti';
+        img.loading = 'lazy';
+        item.appendChild(img);
         cluster.appendChild(item);
     }
 

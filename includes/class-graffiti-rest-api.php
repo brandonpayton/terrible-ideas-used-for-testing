@@ -39,6 +39,11 @@ class Graffiti_REST_API {
 		$paragraph_index = $request->get_param( 'paragraph_index' );
 		$image_data      = $request->get_param( 'image_data' );
 
+		// Check if graffiti is enabled
+		if ( ! get_option( 'graffiti_enabled', true ) ) {
+			return new WP_Error( 'graffiti_disabled', 'Graffiti is currently disabled.', array( 'status' => 403 ) );
+		}
+
 		// Verify parent post exists
 		$parent_post = get_post( $post_id );
 		if ( ! $parent_post || ! in_array( $parent_post->post_type, array( 'post', 'page' ), true ) ) {
@@ -55,6 +60,12 @@ class Graffiti_REST_API {
 
 		if ( false === $image_data ) {
 			return new WP_Error( 'decode_failed', 'Failed to decode image.', array( 'status' => 400 ) );
+		}
+
+		// Check file size (max 2MB)
+		$max_size = 2 * 1024 * 1024;
+		if ( strlen( $image_data ) > $max_size ) {
+			return new WP_Error( 'image_too_large', 'Image exceeds maximum size of 2MB.', array( 'status' => 400 ) );
 		}
 
 		// Create graffiti post
