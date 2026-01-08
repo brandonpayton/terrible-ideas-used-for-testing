@@ -14,6 +14,10 @@ class Graffiti_Renderer {
             return $content;
         }
 
+        if ( ! get_option( 'graffiti_enabled', true ) ) {
+            return $content;
+        }
+
         $post_id = get_the_ID();
 
         // Query graffiti for this post

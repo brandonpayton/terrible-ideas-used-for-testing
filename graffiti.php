@@ -20,6 +20,7 @@ require_once GRAFFITI_PLUGIN_DIR . 'includes/class-graffiti-post-type.php';
 require_once GRAFFITI_PLUGIN_DIR . 'includes/class-graffiti-rest-api.php';
 require_once GRAFFITI_PLUGIN_DIR . 'includes/class-graffiti-renderer.php';
 require_once GRAFFITI_PLUGIN_DIR . 'includes/class-graffiti-admin.php';
+require_once GRAFFITI_PLUGIN_DIR . 'includes/class-graffiti-settings.php';
 
 function graffiti_init() {
 	new Graffiti_Post_Type();
@@ -28,12 +29,17 @@ function graffiti_init() {
 
 	if ( is_admin() ) {
 		new Graffiti_Admin();
+		new Graffiti_Settings();
 	}
 }
 add_action( 'plugins_loaded', 'graffiti_init' );
 
 function graffiti_enqueue_assets() {
 	if ( ! is_singular( array( 'post', 'page' ) ) ) {
+		return;
+	}
+
+	if ( ! get_option( 'graffiti_enabled', true ) ) {
 		return;
 	}
 
