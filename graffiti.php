@@ -19,11 +19,16 @@ define( 'GRAFFITI_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 require_once GRAFFITI_PLUGIN_DIR . 'includes/class-graffiti-post-type.php';
 require_once GRAFFITI_PLUGIN_DIR . 'includes/class-graffiti-rest-api.php';
 require_once GRAFFITI_PLUGIN_DIR . 'includes/class-graffiti-renderer.php';
+require_once GRAFFITI_PLUGIN_DIR . 'includes/class-graffiti-admin.php';
 
 function graffiti_init() {
 	new Graffiti_Post_Type();
 	new Graffiti_REST_API();
 	new Graffiti_Renderer();
+
+	if ( is_admin() ) {
+		new Graffiti_Admin();
+	}
 }
 add_action( 'plugins_loaded', 'graffiti_init' );
 
