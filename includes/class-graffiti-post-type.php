@@ -7,6 +7,7 @@ class Graffiti_Post_Type {
 
 	public function __construct() {
 		add_action( 'init', array( $this, 'register_post_type' ) );
+		add_action( 'init', array( $this, 'register_meta' ) );
 	}
 
 	public function register_post_type() {
@@ -38,5 +39,28 @@ class Graffiti_Post_Type {
 		);
 
 		register_post_type( 'graffiti', $args );
+	}
+
+	public function register_meta() {
+		register_post_meta( 'graffiti', '_graffiti_post_id', array(
+			'type'              => 'integer',
+			'single'            => true,
+			'sanitize_callback' => 'absint',
+			'show_in_rest'      => false,
+		) );
+
+		register_post_meta( 'graffiti', '_graffiti_paragraph_index', array(
+			'type'              => 'integer',
+			'single'            => true,
+			'sanitize_callback' => 'absint',
+			'show_in_rest'      => false,
+		) );
+
+		register_post_meta( 'graffiti', '_graffiti_ip_address', array(
+			'type'              => 'string',
+			'single'            => true,
+			'sanitize_callback' => 'sanitize_text_field',
+			'show_in_rest'      => false,
+		) );
 	}
 }
