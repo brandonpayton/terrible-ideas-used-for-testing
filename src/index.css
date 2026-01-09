@@ -1,0 +1,78 @@
+/* src/index.css */
+.anybody-editing-block {
+  position: relative;
+}
+
+.anybody-editing-block:hover .anybody-editing-edit-button,
+.anybody-editing-block:focus-within .anybody-editing-edit-button {
+  opacity: 1;
+}
+
+.anybody-editing-edit-button {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 100;
+}
+
+.anybody-editing-edit-button:focus {
+  opacity: 1;
+}
+
+.anybody-editing-editor-wrapper {
+  border: 2px solid #007cba;
+  border-radius: 4px;
+  padding: 16px;
+  margin: 8px 0;
+  background: #fff;
+}
+
+.anybody-editing-editor-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  justify-content: flex-end;
+}
+
+.anybody-editing-field-editor {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.anybody-editing-field-input {
+  font-size: inherit;
+  font-family: inherit;
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.anybody-editing-error {
+  color: #cc0000;
+  padding: 8px;
+  background: #fff0f0;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.anybody-editing-dropzone {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.anybody-editing-dropzone:hover,
+.anybody-editing-dropzone.is-dragging {
+  border-color: #007cba;
+  background: #f0f7fc;
+}
+
+.anybody-editing-dropzone input[type="file"] {
+  display: none;
+}
