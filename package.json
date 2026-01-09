@@ -7,9 +7,11 @@
     "start": "wp-scripts start",
     "lint:js": "wp-scripts lint-js",
     "lint:css": "wp-scripts lint-style",
-    "test:js": "wp-scripts test-unit-js"
+    "test:js": "wp-scripts test-unit-js",
+    "test:e2e": "playwright test"
   },
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "@wordpress/scripts": "^27.0.0"
   },
   "dependencies": {
