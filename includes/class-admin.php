@@ -12,6 +12,8 @@ class Anybody_Editing_Admin {
 	public function __construct() {
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
 		add_action( 'save_post', array( $this, 'save_meta_box' ), 10, 2 );
+		add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
+		add_action( 'admin_init', array( $this, 'register_settings' ) );
 	}
 
 	/**
@@ -88,5 +90,64 @@ class Anybody_Editing_Admin {
 	 */
 	public static function is_editing_enabled( $post_id ) {
 		return get_post_meta( $post_id, self::META_KEY, true ) === '1';
+	}
+
+	/**
+	 * Add settings page to admin menu.
+	 */
+	public function add_settings_page() {
+		add_options_page(
+			__( 'Anybody Editing', 'anybody-editing' ),
+			__( 'Anybody Editing', 'anybody-editing' ),
+			'manage_options',
+			'anybody-editing',
+			array( $this, 'render_settings_page' )
+		);
+	}
+
+	/**
+	 * Register plugin settings.
+	 */
+	public function register_settings() {
+		register_setting( 'anybody_editing_settings', 'anybody_editing_max_upload_size' );
+		register_setting( 'anybody_editing_settings', 'anybody_editing_allowed_types' );
+	}
+
+	/**
+	 * Render settings page.
+	 */
+	public function render_settings_page() {
+		$max_size = get_option( 'anybody_editing_max_upload_size', 2 );
+		$allowed_types = get_option( 'anybody_editing_allowed_types', array( 'jpg', 'png', 'gif', 'webp' ) );
+		?>
+		<div class="wrap">
+			<h1><?php esc_html_e( 'Anybody Editing Settings', 'anybody-editing' ); ?></h1>
+			<form method="post" action="options.php">
+				<?php settings_fields( 'anybody_editing_settings' ); ?>
+				<table class="form-table">
+					<tr>
+						<th scope="row">
+							<label for="max_upload_size"><?php esc_html_e( 'Max Upload Size (MB)', 'anybody-editing' ); ?></label>
+						</th>
+						<td>
+							<input type="number" id="max_upload_size" name="anybody_editing_max_upload_size" value="<?php echo esc_attr( $max_size ); ?>" min="1" max="10">
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Allowed Image Types', 'anybody-editing' ); ?></th>
+						<td>
+							<?php foreach ( array( 'jpg', 'png', 'gif', 'webp' ) as $type ) : ?>
+								<label>
+									<input type="checkbox" name="anybody_editing_allowed_types[]" value="<?php echo esc_attr( $type ); ?>" <?php checked( in_array( $type, (array) $allowed_types, true ) ); ?>>
+									<?php echo esc_html( strtoupper( $type ) ); ?>
+								</label><br>
+							<?php endforeach; ?>
+						</td>
+					</tr>
+				</table>
+				<?php submit_button(); ?>
+			</form>
+		</div>
+		<?php
 	}
 }
