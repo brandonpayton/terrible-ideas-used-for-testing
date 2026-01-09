@@ -14,6 +14,9 @@ class Anybody_Editing_Admin {
 		add_action( 'save_post', array( $this, 'save_meta_box' ), 10, 2 );
 		add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		add_filter( 'ajax_query_attachments_args', array( $this, 'filter_media_library' ) );
+		add_action( 'restrict_manage_posts', array( $this, 'add_media_filter_dropdown' ) );
+		add_filter( 'parse_query', array( $this, 'filter_media_query' ) );
 	}
 
 	/**
@@ -149,5 +152,77 @@ class Anybody_Editing_Admin {
 			</form>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Add filter dropdown to media library.
+	 */
+	public function add_media_filter_dropdown() {
+		$screen = get_current_screen();
+		if ( $screen->id !== 'upload' ) {
+			return;
+		}
+
+		$selected = isset( $_GET['anybody_editing_filter'] ) ? $_GET['anybody_editing_filter'] : '';
+		?>
+		<select name="anybody_editing_filter">
+			<option value=""><?php esc_html_e( 'All uploads', 'anybody-editing' ); ?></option>
+			<option value="visitor" <?php selected( $selected, 'visitor' ); ?>><?php esc_html_e( 'Visitor uploads', 'anybody-editing' ); ?></option>
+			<option value="admin" <?php selected( $selected, 'admin' ); ?>><?php esc_html_e( 'Admin uploads', 'anybody-editing' ); ?></option>
+		</select>
+		<?php
+	}
+
+	/**
+	 * Filter media query based on dropdown selection.
+	 *
+	 * @param WP_Query $query The query object.
+	 */
+	public function filter_media_query( $query ) {
+		global $pagenow;
+
+		if ( $pagenow !== 'upload.php' || ! isset( $_GET['anybody_editing_filter'] ) ) {
+			return;
+		}
+
+		$filter = $_GET['anybody_editing_filter'];
+
+		if ( $filter === 'visitor' ) {
+			$query->query_vars['meta_key']   = '_anybody_editing_upload';
+			$query->query_vars['meta_value'] = '1';
+		} elseif ( $filter === 'admin' ) {
+			$query->query_vars['meta_query'] = array(
+				array(
+					'key'     => '_anybody_editing_upload',
+					'compare' => 'NOT EXISTS',
+				),
+			);
+		}
+	}
+
+	/**
+	 * Filter media library AJAX query.
+	 *
+	 * @param array $query Query arguments.
+	 * @return array
+	 */
+	public function filter_media_library( $query ) {
+		if ( isset( $_REQUEST['query']['anybody_editing_filter'] ) ) {
+			$filter = $_REQUEST['query']['anybody_editing_filter'];
+
+			if ( $filter === 'visitor' ) {
+				$query['meta_key']   = '_anybody_editing_upload';
+				$query['meta_value'] = '1';
+			} elseif ( $filter === 'admin' ) {
+				$query['meta_query'] = array(
+					array(
+						'key'     => '_anybody_editing_upload',
+						'compare' => 'NOT EXISTS',
+					),
+				);
+			}
+		}
+
+		return $query;
 	}
 }
