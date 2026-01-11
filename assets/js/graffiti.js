@@ -34,11 +34,12 @@
 
         blocks.forEach((block, index) => {
             // Create trigger before each block (except first)
+            // Use 1-based index to match server-side rendering in Graffiti_Renderer
             if (index > 0) {
                 const trigger = document.createElement('div');
                 trigger.className = 'graffiti-trigger';
-                trigger.dataset.paragraphIndex = index;
-                trigger.addEventListener('click', () => openModal(index));
+                trigger.dataset.paragraphIndex = index + 1;
+                trigger.addEventListener('click', () => openModal(index + 1));
                 block.parentNode.insertBefore(trigger, block);
             }
         });
@@ -48,8 +49,8 @@
             const lastBlock = blocks[blocks.length - 1];
             const trigger = document.createElement('div');
             trigger.className = 'graffiti-trigger';
-            trigger.dataset.paragraphIndex = blocks.length;
-            trigger.addEventListener('click', () => openModal(blocks.length));
+            trigger.dataset.paragraphIndex = blocks.length + 1;
+            trigger.addEventListener('click', () => openModal(blocks.length + 1));
             lastBlock.parentNode.insertBefore(trigger, lastBlock.nextSibling);
         }
     }
