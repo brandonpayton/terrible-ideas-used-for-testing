@@ -1,0 +1,172 @@
+/* Graffiti trigger between paragraphs */
+.graffiti-trigger {
+    position: relative;
+    height: 20px;
+    margin: 0;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.graffiti-trigger:hover {
+    opacity: 1;
+}
+
+.graffiti-trigger::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #ccc;
+}
+
+.graffiti-trigger::after {
+    content: '+';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #666;
+    line-height: 1;
+}
+
+/* Graffiti modal */
+.graffiti-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000;
+}
+
+.graffiti-modal {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.graffiti-canvas {
+    border: 1px solid #ccc;
+    cursor: crosshair;
+    display: block;
+    touch-action: none;
+}
+
+.graffiti-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.graffiti-colors {
+    display: flex;
+    gap: 5px;
+}
+
+.graffiti-color {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    padding: 0;
+}
+
+.graffiti-color.active {
+    border-color: #333;
+}
+
+.graffiti-color[data-color="black"] { background: #000; }
+.graffiti-color[data-color="red"] { background: #e53935; }
+.graffiti-color[data-color="blue"] { background: #1e88e5; }
+.graffiti-color[data-color="green"] { background: #43a047; }
+.graffiti-color[data-color="yellow"] { background: #fdd835; }
+.graffiti-color[data-color="white"] { background: #fff; border-color: #ccc; }
+
+.graffiti-eraser {
+    padding: 5px 10px;
+    cursor: pointer;
+    background: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.graffiti-eraser.active {
+    background: #e0e0e0;
+    border-color: #999;
+}
+
+.graffiti-actions {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.graffiti-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.graffiti-btn-clear {
+    background: #f5f5f5;
+    border: 1px solid #ccc;
+}
+
+.graffiti-btn-cancel {
+    background: #f5f5f5;
+    border: 1px solid #ccc;
+}
+
+.graffiti-btn-submit {
+    background: #1e88e5;
+    color: #fff;
+}
+
+.graffiti-btn-submit:hover {
+    background: #1565c0;
+}
+
+/* Displayed graffiti */
+.graffiti-cluster {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.graffiti-item {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.graffiti-item img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
